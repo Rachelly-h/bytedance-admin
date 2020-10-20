@@ -1,16 +1,18 @@
 <template>
   <div id="app">
     <h1>头条发布系统</h1>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted () {
+    console.log(this)
+  }
 }
 </script>
 
 <style lang="less">
-
 </style>
