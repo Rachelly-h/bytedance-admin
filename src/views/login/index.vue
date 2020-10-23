@@ -75,9 +75,9 @@ export default {
       this.loginLoading = true
 
       login(this.user).then(res => {
-        console.log(res)
-
         this.loginLoading = false
+
+        window.localStorage.setItem('user', JSON.stringify(res.data.data))
 
         this.$router.push({
           name: 'home'

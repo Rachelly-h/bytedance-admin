@@ -1,17 +1,22 @@
 <template>
   <el-container class="layout-container">
-    <el-aside class="aside" width="200px">
-      <app-aside class="aside-menu"></app-aside>
+    <el-aside class="aside" width="auto">
+      <app-aside class="aside-menu" :is-collapse="isCollapse"></app-aside>
     </el-aside>
     <el-container>
       <el-header class="header">
         <div>
-          <i class="el-icon-s-fold"></i>
+          <i :class="{
+              'el-icon-s-fold': isCollapse,
+              'el-icon-s-unfold': !isCollapse
+            }"
+            @click="isCollapse = !isCollapse"
+          ></i>
           <span>Rachey头条管理系统</span>
         </div>
         <el-dropdown>
           <div class="avatar-wrap">
-            <img class="avatar" src="https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3625344829,3079500447&fm=26&gp=0.jpg" alt="">
+            <img class="avatar" :src="user.photo" alt="">
             <span>{{ user.name ? user.name : '用户昵称' }}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </div>
@@ -35,7 +40,8 @@ import { getUserProfile } from '@/api/user'
 export default {
   name: 'LayoutIndex',
   data: () => ({
-    user: {}
+    user: {},
+    isCollapse: false
   }),
   components: {
     AppAside

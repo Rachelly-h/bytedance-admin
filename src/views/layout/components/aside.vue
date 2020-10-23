@@ -1,8 +1,13 @@
 <template>
-  <el-menu default-active="/" router class="nav-menu">
-    <h1>Rachey</h1>
+  <el-menu
+   default-active="/"
+   router
+   class="nav-menu"
+   :collapse="isCollapse"
+  >
+    <h1>{{ isCollapse == true ? 'R' : 'Rachey' }}</h1>
     <el-menu-item index="/">
-      <i class="el-icon-home"></i>
+      <i class="el-icon-s-home"></i>
       <span slot="title">首页</span>
     </el-menu-item>
     <el-menu-item index="/article">
@@ -36,8 +41,13 @@
 export default {
   name: 'AppAside',
   data: () => ({
-
+    isCollapse: true
   }),
+  props: {
+    isCollapse: {
+      type: require
+    }
+  },
   methods: {
 
   }
