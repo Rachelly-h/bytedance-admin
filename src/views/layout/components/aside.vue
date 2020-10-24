@@ -41,11 +41,11 @@
 export default {
   name: 'AppAside',
   data: () => ({
-    isCollapse: true
+    // isCollapse: false
   }),
   props: {
     isCollapse: {
-      type: require
+      type: Boolean
     }
   },
   methods: {
