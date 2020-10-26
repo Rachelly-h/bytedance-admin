@@ -26,6 +26,12 @@ const routes = [
         path: '/article',
         // 目录下的index.vue可以省略
         component: () => import(/* webpackChunkName: 'login' */'@/views/article/')
+      },
+      {
+        name: 'publish',
+        path: '/publish',
+        // 目录下的index.vue可以省略
+        component: () => import(/* webpackChunkName: 'publish' */'@/views/publish/')
       }
     ]
   }
