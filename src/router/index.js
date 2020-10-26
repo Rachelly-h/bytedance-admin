@@ -7,22 +7,28 @@ const routes = [
   {
     name: 'login',
     path: '/login',
-    component: () => import(/* webpackChunkName: 'login' */'@/views/login/index.vue')
+    // 目录下的index.vue可以省略
+    component: () => import(/* webpackChunkName: 'login' */'@/views/login/')
   },
   {
     path: '/',
     // 命名路由layout有一个默认子路由，这个名字没有意义
     // name: 'layout',
-    component: () => import(/* webpackChunkName: 'layout' */'@/views/layout/index.vue'),
+    component: () => import(/* webpackChunkName: 'layout' */'@/views/layout/'),
     children: [
       {
         name: 'home',
         path: '', // 空表示默认子路由
-        component: () => import(/* webpackChunkName: 'home' */'@/views/home/index.vue')
+        component: () => import(/* webpackChunkName: 'home' */'@/views/home/')
+      },
+      {
+        name: 'article',
+        path: '/article',
+        // 目录下的index.vue可以省略
+        component: () => import(/* webpackChunkName: 'login' */'@/views/article/')
       }
     ]
   }
-
 ]
 
 const router = new VueRouter({

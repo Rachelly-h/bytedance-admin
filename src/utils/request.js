@@ -3,11 +3,22 @@
  */
 
 import axios from 'axios'
+import JSONbigint from 'json-bigint'
 
 // 创建的axios实例
 const request = axios.create({
   // 请求的基础路径
-  baseURL: 'http://ttapi.research.itcast.cn/'
+  baseURL: 'http://ttapi.research.itcast.cn/',
+  // 自定义后端返回的原视数据的处理
+  // data就是未经处理返回的数据，即未使用JSON.parse()
+  transformResponse: [function (data) {
+    // 防止后端返回的数据不是JSON字符串
+    try {
+      return JSONbigint.parse(data)
+    } catch (err) {
+      return data
+    }
+  }]
 })
 
 request.interceptors.request.use(config => {
