@@ -32,6 +32,12 @@ const routes = [
         path: '/publish',
         // 目录下的index.vue可以省略
         component: () => import(/* webpackChunkName: 'publish' */'@/views/publish/')
+      },
+      {
+        name: 'image',
+        path: '/image',
+        // 目录下的index.vue可以省略
+        component: () => import(/* webpackChunkName: 'image' */'@/views/image/')
       }
     ]
   }
