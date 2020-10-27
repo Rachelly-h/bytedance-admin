@@ -12,7 +12,13 @@
           <el-input v-model="article.title"></el-input>
         </el-form-item>
         <el-form-item label="内容">
-          <el-input type="textarea" v-model="article.content"></el-input>
+          <el-tiptap
+           v-model="article.content"
+           :extensions="extensions"
+           lang="zh"
+           height="230"
+           placeholder="请输入文章内容"
+          ></el-tiptap>
         </el-form-item>
         <el-form-item label="封面">
           <el-radio-group v-model="article.cover.type">
@@ -48,6 +54,28 @@ import {
   getArticle,
   updateArticle
 } from '@/api/article'
+import {
+  ElementTiptap,
+  Doc,
+  Text,
+  Paragraph,
+  Heading,
+  Bold,
+  Underline,
+  Italic,
+  Strike,
+  ListItem,
+  BulletList,
+  OrderedList,
+  Fullscreen,
+  Image,
+  CodeBlock,
+  HorizontalRule,
+  TextColor,
+  Preview
+} from 'element-tiptap'
+import 'element-tiptap/lib/index.css'
+import { uploadImage } from '@/api/image'
 
 export default {
   name: 'PublishIndex',
@@ -61,8 +89,42 @@ export default {
       },
       channel_id: null
     },
-    channels: []
+    channels: [],
+    // 它们将会按照你声明的顺序被添加到菜单栏和气泡菜单中
+    extensions: [
+      new Doc(),
+      new Text(),
+      new Paragraph(),
+      new Heading({ level: 5 }),
+      new Bold({ bubble: true }), // 在气泡菜单中渲染菜单按钮
+      new Image({
+        // 默认把图片生成base64格式和内容存储在一起
+        uploadRequest (file) {
+          // 图片上传方法，返回一个Promise<url>
+          const formdata = new FormData()
+          formdata.append('image', file)
+          return uploadImage(formdata).then(res => {
+            console.log(res)
+            return res.data.data.url
+          })
+        }
+      }),
+      new Underline({ bubble: true, menubar: false }), // 在气泡菜单而不在菜单栏中渲染菜单按钮
+      new Italic(),
+      new Strike(),
+      new HorizontalRule(),
+      new TextColor({ bubble: true }),
+      new ListItem(),
+      new BulletList(),
+      new OrderedList(),
+      new Fullscreen(),
+      new CodeBlock(),
+      new Preview()
+    ]
   }),
+  components: {
+    'el-tiptap': ElementTiptap
+  },
   created () {
     this.loadChannels()
 
