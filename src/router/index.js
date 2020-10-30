@@ -38,6 +38,12 @@ const routes = [
         path: '/image',
         // 目录下的index.vue可以省略
         component: () => import(/* webpackChunkName: 'image' */'@/views/image/')
+      },
+      {
+        name: 'comment',
+        path: '/comment',
+        // 目录下的index.vue可以省略
+        component: () => import(/* webpackChunkName: 'comment' */'@/views/comment/')
       }
     ]
   }

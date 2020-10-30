@@ -8,7 +8,7 @@
         </el-breadcrumb>
       </div>
       <div class="action-header">
-        <el-radio-group v-model="collect" @change="loadImages">
+        <el-radio-group v-model="collect" @change="loadImages()">
           <el-radio-button :label="false">全部</el-radio-button>
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
@@ -22,15 +22,38 @@
          :lg="4"
          v-for="(image, index) in images"
          :key="index"
+         class="image-item"
         >
           <el-image
            style="height: 100px"
            :src="image.url"
            fit="cover"
           ></el-image>
+          <div class="image-action">
+            <i
+              :class="{
+                'el-icon-star-on': image.is_collected,
+                'el-icon-star-off': !image.is_collected
+              }"
+              @click="onCollect(image)"
+            ></i>
+            <i class="el-icon-delete" @click="onDelete(image)"></i>
+          </div>
         </el-col>
       </el-row>
+      <!--
+        :current-page.sync="page"
+        添加page数据，解决'全部'和'收藏'切换时，elementUI的分页高亮不改变问题
+      -->
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="totalCount"
+        :current-page.sync="page"
+        @current-change="onPageChange"
+      ></el-pagination>
     </el-card>
+
     <el-dialog title="上传素材" :visible.sync="dialogUploadVisible" append-to-body>
       <el-upload
        class="upload-demo"
@@ -52,29 +75,52 @@
 </template>
 
 <script>
-import { getImages } from '@/api/image'
+import { getImages, collectImage, deleteImage } from '@/api/image'
 
 export default {
   name: 'ImageIndex',
   data: () => ({
     collect: false,
     images: [],
-    dialogUploadVisible: false
+    dialogUploadVisible: false,
+    totalCount: 0,
+    page: 1
   }),
   created () {
     this.loadImages()
   },
   methods: {
-    loadImages (collect = false) {
+    loadImages (page = 1) {
+      this.page = page
       getImages({
-        collect
+        collect: this.collect,
+        page,
+        per_page: 12
       }).then(res => {
         this.images = res.data.data.results
+        this.totalCount = res.data.data.total_count
       })
     },
     onUploadSuccess () {
       this.dialogUploadVisible = false
-      this.loadImages(false)
+      this.loadImages(this.page)
+      this.$message({
+        type: 'success',
+        message: '上传成功'
+      })
+    },
+    onPageChange (page) {
+      this.loadImages(page)
+    },
+    onCollect (image) {
+      collectImage(image.id, !image.is_collected).then(res => {
+        image.is_collected = !image.is_collected
+      })
+    },
+    onDelete (image) {
+      deleteImage(image.id).then(res => {
+        this.loadImages(this.page)
+      })
     }
   },
   computed: {
@@ -93,5 +139,22 @@ export default {
     padding-bottom: 20px;
     display: flex;
     justify-content: space-between;
+  }
+
+  .image-item {
+    position: relative;
+  }
+  .image-action {
+    height: 40px;
+    background-color: rgba(204, 204, 204, .5);
+    position: absolute;
+    bottom: 4px;
+    left: 10px;
+    right: 10px;
+    font-size: 25px;
+    display: flex;
+    justify-content:space-evenly;
+    align-items: center;
+    color: #fff;
   }
 </style>
