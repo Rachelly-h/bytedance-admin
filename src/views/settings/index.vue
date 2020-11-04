@@ -79,6 +79,7 @@
 import { getUserProfile, updateUserPhoto, updateUserProfile } from '@/api/user'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
+import globalBus from '@/utils/global-bus'
 
 export default {
   name: 'SettingsIndex',
@@ -148,6 +149,8 @@ export default {
             type: 'success',
             message: '更新头像成功'
           })
+
+          globalBus.$emit('update-profile', this.user)
         })
       })
     },
@@ -159,7 +162,10 @@ export default {
           type: 'success',
           message: '保存成功'
         })
+
         this.updateProfileLoading = false
+
+        globalBus.$emit('update-profile', this.user)
       })
     }
   }
