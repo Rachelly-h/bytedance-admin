@@ -18,6 +18,18 @@ export const getUserProfile = () => {
   })
 }
 
-export const updateUser = () => {
+export const updateUserPhoto = data => {
+  return request({
+    method: 'PATCH',
+    url: '/mp/v1_0/user/photo',
+    data
+  })
+}
 
+export const updateUserProfile = data => {
+  return request({
+    method: 'PATCH',
+    url: '/mp/v1_0/user/profile',
+    data
+  })
 }

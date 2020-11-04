@@ -50,7 +50,7 @@
 import { getArticles, updateCommentStatus } from '@/api/article'
 
 export default {
-  name: 'commentIndex',
+  name: 'CommentIndex',
   data: () => ({
     articles: [],
     totalCount: 0,

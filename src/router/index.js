@@ -44,6 +44,12 @@ const routes = [
         path: '/comment',
         // 目录下的index.vue可以省略
         component: () => import(/* webpackChunkName: 'comment' */'@/views/comment/')
+      },
+      {
+        name: 'settings',
+        path: '/settings',
+        // 目录下的index.vue可以省略
+        component: () => import(/* webpackChunkName: 'settings' */'@/views/settings/')
       }
     ]
   }
