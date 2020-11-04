@@ -50,6 +50,12 @@ const routes = [
         path: '/settings',
         // 目录下的index.vue可以省略
         component: () => import(/* webpackChunkName: 'settings' */'@/views/settings/')
+      },
+      {
+        name: 'fans',
+        path: '/fans',
+        // 目录下的index.vue可以省略
+        component: () => import(/* webpackChunkName: 'fans' */'@/views/fans/')
       }
     ]
   }
