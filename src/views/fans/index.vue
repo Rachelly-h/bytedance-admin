@@ -2,12 +2,14 @@
   <div class='fans-container'>
     <div ref="main" class="main"></div>
     <map-chart></map-chart>
+    <bmap></bmap>
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
 import mapChart from './components/mapChart'
+import Bmap from './components/Bmap'
 
 export default {
   name: 'FansIndex',
@@ -15,7 +17,8 @@ export default {
 
   }),
   components: {
-    mapChart
+    mapChart,
+    Bmap
   },
   mounted () {
     const myChart = echarts.init(this.$refs.main)
