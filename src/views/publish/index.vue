@@ -32,6 +32,33 @@
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
+          <template v-if="article.cover.type > 0">
+            <!-- 如果在子组件传值传参以后，还需要获得index等参数，则需手动指定$event -->
+            <!--
+              如果父组件传值给子组件的数据，还需要修改
+              则可以使用 v-model 简化
+
+              <upload-cover
+                v-for="(cover, index) in article.cover.type"
+                :key="cover"
+                @update-cover="onUpdateCover(index, $event)"
+                :cover-image="article.cover.images[index]"
+              ></upload-cover>
+
+              v-model="article.cover.images[index]"
+              相当于
+                给子组件传递了名字叫value的数据
+                :value="article.cover.images[index]"
+                和
+                默认监听input事件
+                @input="article.cover.images[index]=事件参数"
+            -->
+            <upload-cover
+              v-for="(cover, index) in article.cover.type"
+              :key="cover"
+              v-model="article.cover.images[index]"
+            ></upload-cover>
+          </template>
         </el-form-item>
         <el-form-item label="频道" prop="channel_id">
           <el-select placeholder="请选择频道" v-model="article.channel_id">
@@ -53,6 +80,7 @@
 </template>
 
 <script>
+import UploadCover from './components/upload-cover'
 import {
   getArticleChannels,
   addArticle,
@@ -149,7 +177,8 @@ export default {
     }
   }),
   components: {
-    'el-tiptap': ElementTiptap
+    'el-tiptap': ElementTiptap,
+    UploadCover
   },
   created () {
     this.loadChannels()
@@ -194,6 +223,9 @@ export default {
       getArticle(this.$route.query.id).then(res => {
         this.article = res.data.data
       })
+    },
+    onUpdateCover (index, url) {
+      this.article.cover.images[index] = url
     }
   }
 }
