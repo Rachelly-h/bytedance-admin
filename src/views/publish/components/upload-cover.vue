@@ -10,11 +10,17 @@
     <el-dialog
      title="选择封面"
      :visible.sync="dialogVisible"
-     width="30%"
+     width="70%"
      append-to-body
     >
       <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="素材库" name="first"></el-tab-pane>
+        <el-tab-pane label="素材库" name="first">
+          <image-list
+           :is-show-add="false"
+           :is-show-action="false"
+           ref="image-list"
+          ></image-list>
+        </el-tab-pane>
         <el-tab-pane label="上传图片" name="second">
           <input ref="file" type="file" @change="onFileChange">
           <img ref="preview-image" src="" width="100" alt="">
@@ -22,7 +28,10 @@
       </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button>取消</el-button>
-        <el-button type="primary" @click="onCoverConfirm">确定</el-button>
+        <el-button
+         type="primary"
+         @click="onCoverConfirm"
+        >确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -30,9 +39,13 @@
 
 <script>
 import { uploadImage } from '@/api/image'
+import ImageList from '@/views/image/components/image-list'
 
 export default {
   name: 'UploadCover',
+  components: {
+    ImageList
+  },
   data: () => ({
     dialogVisible: false,
     activeName: ''
@@ -67,6 +80,17 @@ export default {
           // this.$emit('update-cover', res.data.data.url);
           this.$emit('input', res.data.data.url)
         })
+      } else if (this.activeName === 'first') {
+        const imageList = this.$refs['image-list']
+        const selected = imageList.selected
+
+        if (selected === null) {
+          this.$message('请选择封面图片')
+          return
+        }
+        this.dialogVisible = false
+
+        this.$emit('input', imageList.images[selected].url)
       }
     }
   }
@@ -74,13 +98,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .cover-wrap {
-    width: 150px;
+.cover-wrap {
+  width: 150px;
+  height: 120px;
+  border: 1px dotted #000;
+  .cover-image {
     height: 120px;
-    border: 1px dotted #000;
-    .cover-image {
-      height: 120px;
-      max-width: 100%;
-    }
+    max-width: 100%;
   }
+}
 </style>
