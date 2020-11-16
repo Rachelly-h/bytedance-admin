@@ -4,6 +4,8 @@
 
 import axios from 'axios'
 import JSONbigint from 'json-bigint'
+import router from '@/router'
+import { Message } from 'element-ui'
 
 // 创建的axios实例
 const request = axios.create({
@@ -39,5 +41,30 @@ request.interceptors.request.use(config => {
 //   method: '',
 //   url: ''
 // })
+
+request.interceptors.response.use(function (response) {
+  // 所有响应码为2xx的响应
+  // response 响应数据
+
+  return response
+}, function (err) {
+  const status = err.reponse.status
+  // 任何不是2xx的响应码
+  if (status === 401) {
+    window.localStorage.removeItem('user')
+    router.push('/login')
+    Message.error('登录状态无效')
+  } else if (status === 400) {
+    // 参数错误
+    Message.warning('请求参数错误')
+  } else if (status === 403) {
+    // 没有权限
+    Message.warning('没有操作权限')
+  } else if (status >= 500) {
+    // 服务端错误
+    Message.error('服务端内部异常，请稍后重试')
+  }
+  return Promise.reject(err)
+})
 
 export default request
